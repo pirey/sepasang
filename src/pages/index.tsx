@@ -56,14 +56,14 @@ function duplicateAndShuffle(cards: Card[]): Card[] {
 
 const Card = ({ card }: { card: Card }) => {
   return (
-    <div className="w-40 h-40">
-      <Image width={160} height={160} src={card.imgSrc} alt={card.title} />
+    <div className="w-24 h-24">
+      <Image width={96} height={96} src={card.imgSrc} alt={card.title} />
     </div>
   )
 }
 
 const CardClosed = () => {
-  return <div className="w-40 h-40 bg-teal-600"></div>
+  return <div className="w-24 h-24 bg-teal-600"></div>
 }
 
 type State = {
@@ -74,7 +74,7 @@ type State = {
 }
 
 const PelmanismGame = () => {
-  const numCards = 10
+  const numCards = 12
   const [state, setState] = React.useState<State>({
     selectedIndex: -1,
     tempOpenIndices: [],
@@ -85,6 +85,9 @@ const PelmanismGame = () => {
     return state.solvedCards.find((c) => c.id === card.id)
   }
   const handleClick = (card: Card, index: number) => {
+    if (state.tempOpenIndices.length === 2) {
+      return
+    }
     if (state.selectedIndex === -1) {
       setState({
         ...state,
@@ -118,6 +121,7 @@ const PelmanismGame = () => {
   }
   // TODO: pre fetch images as blob
   React.useEffect(() => {
+    const q = new URLSearchParams(window.location.search)
     fetch(`https://picsum.photos/v2/list?limit=${numCards + 1}`)
       .then((res) => res.json())
       .then((res: Picsum[]) => res.slice(1).map(picsumToCard))
@@ -126,9 +130,16 @@ const PelmanismGame = () => {
         setState({ ...state, remainingCards: cards })
       })
   }, [])
+  React.useEffect(() => {
+    if (state.solvedCards.length === numCards) {
+      setTimeout(() => {
+        window.alert("SELAMAT, ANDA GABUT!")
+      }, 100)
+    }
+  }, [state.solvedCards.length, numCards])
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center">
-      <div className="max-w-3xl flex flex-row flex-wrap justify-center items-center">
+    <div className="w-screen flex flex-col items-center justify-center">
+      <div className="max-w-2xl flex flex-row flex-wrap justify-center items-center">
         {state.remainingCards.map((card, i) => {
           if (isCardSolved(card) || state.tempOpenIndices.includes(i)) {
             return (
