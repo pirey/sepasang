@@ -138,7 +138,7 @@ const PelmanismGame = () => {
     }
   }, [state.solvedCards.length, numCards])
   return (
-    <div className="w-screen flex flex-col items-center justify-center">
+    <div className="w-screen flex flex-col items-center justify-center pt-8">
       <div className="max-w-2xl flex flex-row flex-wrap justify-center items-center">
         {state.remainingCards.map((card, i) => {
           if (isCardSolved(card) || state.tempOpenIndices.includes(i)) {
