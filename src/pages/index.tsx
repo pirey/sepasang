@@ -74,7 +74,7 @@ type State = {
 }
 
 const PelmanismGame = () => {
-  const numCards = 12
+  const numCards = 6
   const [state, setState] = React.useState<State>({
     selectedIndex: -1,
     tempOpenIndices: [],
